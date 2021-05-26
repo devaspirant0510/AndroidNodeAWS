@@ -9,7 +9,7 @@ const data = {0:{"name":"seungho",
 		"lang":"go"}}
 
 const server = http.createServer((req,res)=>{
-	if (req.url=="/"){
+	if (req.url==="/"){
 		res.writeHead(200,{"Content-Type":"text/json"});
 		let data2Json = JSON.stringify(data);
 		res.end(data2Json);
