@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const app = express();
 
-let data = fs.readFileSync(`${__dirname}\\movies.json`);
+let data = fs.readFileSync(`${__dirname}/movies.json`);
 data = JSON.parse(data);
 //let json_data = JSON.stringify(data);
 
@@ -20,7 +20,9 @@ app.get("/movies",(req, res) => {
         movie_list.push({id:value['id'],title:value['title']});
     });
 
-    const data2json = JSON.stringify(movie_list);
+    const data2obj = {data:movie_list};
+    
+    const data2json = JSON.stringify(data2obj);
     res.end(data2json);
 });
 
