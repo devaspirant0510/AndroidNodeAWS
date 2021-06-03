@@ -1,11 +1,15 @@
 const express = require("express");
 const fs = require("fs");
 
+
 const app = express();
 
 let data = fs.readFileSync(`${__dirname}\\movies.json`);
 data = JSON.parse(data);
 //let json_data = JSON.stringify(data);
+
+app.use("/game",express.static("game"));
+
 
 app.get("/",(req, res) => {
     res.writeHead(200, {"Content-Type": "text/plain;charset=utf-8"});
@@ -23,6 +27,14 @@ app.get("/movies",(req, res) => {
     const data2json = JSON.stringify(movie_list);
     res.end(data2json);
 });
+
+app.get("/game",((req, res) => {
+    console.log(__dirname)
+    fs.readFile("index.game",(err,data)=>{
+        console.log(data);
+        res.end(data);
+    });
+}))
 
 app.get("/movies/:id",(req, res) => {
     const id = req.params.id;
