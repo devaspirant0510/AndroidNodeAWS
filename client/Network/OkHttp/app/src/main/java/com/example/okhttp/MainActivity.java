@@ -131,8 +131,33 @@ public class MainActivity extends AppCompatActivity implements InfoDialog.Bottom
         public void onResponse(Call call, Response response) throws IOException {
             String body;
             if (response.body() != null) {
-                body = response.body().toString();
-                Log.e(TAG, "onResponse: "+body );
+                body = response.body().string();
+                try {
+                    JSONObject jsonObject  = new JSONObject(body);
+                    Log.e(TAG, "onResponse: "+jsonObject);
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    for (int i=adapter.getItemCount(); i<jsonArray.length(); i++){
+                        JSONObject el = jsonArray.getJSONObject(i);
+                        adapter.addItem(new RcData(el.getInt("id"),el.getString("title")));
+                        Handler handler = new Handler(getMainLooper());
+                        int finalI = i;
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                adapter.notifyItemInserted(finalI);
+                            }
+                        });
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "onResponse: "+e.toString() );
+                }
+
+
             }
         }
     };
