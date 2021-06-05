@@ -1,3 +1,4 @@
+
 const width = 5;
 const height = 4;
 
@@ -5,9 +6,9 @@ let startTime;
 let endTime;
 
 let color_sample = ["red","red","orange","orange","yellow","yellow",
-        "green","green","blue","blue","purple","purple",
-        "aquamarine","aquamarine","gold","gold","violet","violet",
-        "tan","tan"];
+    "green","green","blue","blue","purple","purple",
+    "aquamarine","aquamarine","gold","gold","violet","violet",
+    "tan","tan"];
 let flag = true;
 let card2count = [];
 let openCardList = [];
