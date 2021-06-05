@@ -16,20 +16,24 @@ function addJsonData(id,title,director,year,synopsis){
             synopsis:synopsis};
 }
 
-app.use("/",express.static("html"));
+// app.use("/",express.static("html"));
 app.use("/game",express.static("game"));
+app.use("/a",express.static("views"));
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.get("/s",(req, res) => {
-    //res.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
-    // fs.readFile("html/index.html",(err,data)=>{
-    //     res.end(data);
-    // });
-    console.log("d");
-    console.log(req.hostname);
-    res.redirect("http://www.naver.com");
+app.get("/",(req, res) => {
+    fs.readFile(__dirname+"\\html\\index.html",(err, data1) => {
+        console.log(data1);
+        res.end(data1);
+    })
 });
+app.get("/mypage",(req,res)=>{
+    //res.writeHead(200,{"Content-Type":"text/html"});
 
+    fs.readFile("./html/index.html",(err, data1) => {
+        res.end(data1);
+    });
+});
 
 app.get("/game",((req, res) => {
     console.log(__dirname)
@@ -57,9 +61,6 @@ app.post("/movies",((req, res,next) => {
     data.push(jsonBody);
     console.log(typeof (data));
     fs.writeFileSync(`${__dirname}/movies.json`,JSON.stringify(data));
-    //res.writeHead(200,{"Content-Type":"text/plain;charset=utf-8"});
-    //res.redirect("https://www.google.co.kr");
-    // res.end();
     res.redirect(`/movies`);
 
 }))
