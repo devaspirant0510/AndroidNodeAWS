@@ -3,13 +3,20 @@ package com.example.kotlinrest
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kotlinrest.JsonAdapter.MyViewHolder as MyViewHolder1
+import com.example.kotlinrest.model.ListData
 
 class JsonAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val myList = arrayListOf<JsonListData>()
+    private val myList = arrayListOf<ListData>()
+    private var callback:jsonAdapterCallback? = null
+
+    interface jsonAdapterCallback{
+        fun onClick(pos:Int)
+    }
+    fun setJsonAdapterCallback(callback: jsonAdapterCallback){
+        this.callback = callback
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.layout_rc_item,
@@ -20,20 +27,25 @@ class JsonAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as MyViewHolder).setItem(myList[position])
         holder.setIsRecyclable(false)
+        holder.itemView.setOnClickListener {
+            callback?.onClick(position)
+        }
     }
 
     override fun getItemCount(): Int {
         return myList.size
 
     }
-    fun addItem(data:JsonListData){
+    fun addItem(data: ListData){
         myList.add(data)
     }
     inner class MyViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
+
         private val jsonId = itemView.findViewById<TextView>(R.id.tv_list_id)
         private val jsonTitle = itemView.findViewById<TextView>(R.id.tv_list_title)
 
-        fun setItem(data: JsonListData){
+
+        fun setItem(data: ListData){
             jsonId.text = data.id
             jsonTitle.text = data.title
         }
