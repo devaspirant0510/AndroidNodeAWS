@@ -9,6 +9,7 @@
             name="data"
             type="com.example.kotlinrest.model.JsonMoviesInfo" />
 
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,13 +49,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
             <TextView
+                android:id="@+id/tv_movie_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.title}" />
 
             <EditText
+                android:id="@+id/et_movie_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
                 android:hint="제목을 입력하세요"
                 android:visibility="gone" />
         </FrameLayout>
@@ -81,12 +86,16 @@
             app:layout_constraintTop_toBottomOf="@+id/frameLayout3">
 
             <TextView
+                android:id="@+id/tv_movie_director"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.director}" />
 
             <EditText
+                android:id="@+id/et_movie_director"
                 android:layout_width="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
                 android:layout_height="wrap_content"
                 android:hint="제목을 입력하세요"
                 android:visibility="gone" />
@@ -114,13 +123,18 @@
             app:layout_constraintTop_toBottomOf="@+id/frameLayout">
 
             <TextView
+                android:id="@+id/tv_movie_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.year+`년`}"  />
 
             <EditText
+                android:id="@+id/et_movie_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
+                android:inputType="number"
                 android:hint="제목을 입력하세요"
                 android:visibility="gone" />
         </FrameLayout>
@@ -141,33 +155,48 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/appCompatButton"
+            app:layout_constraintBottom_toTopOf="@+id/btn_frame"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
 
             <TextView
+                android:id="@+id/tv_movie_synopsis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.synopsis}" />
 
             <EditText
+                android:id="@+id/et_movie_synopsis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
                 android:hint="제목을 입력하세요"
                 android:visibility="gone" />
         </FrameLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/appCompatButton"
+        <FrameLayout
+            android:id="@+id/btn_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="확인"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout4"
-            app:layout_constraintVertical_bias="0.506" />
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout4">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_destroy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="종료"/>
+        </FrameLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

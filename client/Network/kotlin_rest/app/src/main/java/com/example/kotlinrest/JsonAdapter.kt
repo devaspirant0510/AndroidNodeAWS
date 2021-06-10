@@ -7,6 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinrest.model.ListData
 
+/**
+ * @project 
+ * @class JsonAdapter.kt
+ * @author seungho
+ * @github devaspirant0510
+ * @email seungho020510@gmail.com
+ * @since 2021-06-10
+ * @description
+ **/
 class JsonAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val myList = arrayListOf<ListData>()
     private var callback:jsonAdapterCallback? = null
