@@ -13,12 +13,14 @@ let flag = true;
 let card2count = [];
 let openCardList = [];
 //
-// const retry_btn = document.querySelector("#retry-btn");
-// const retry_btn = document.querySelector("#ranking-btn");
+const retry_btn = document.querySelector("#retry-btn");
+//const retry_btn = document.querySelector("#ranking-btn");
 
-// retry_btn.addEventListener("click",(ev)=>{
-//     location.reload();
-// })
+retry_btn.addEventListener("click",(ev)=>{
+    console.log("reload");
+    location.reload();
+});
+
 function shuffle(list){
     let color_list = [];
     for (let i = 0; 0 < list.length; i++) {
