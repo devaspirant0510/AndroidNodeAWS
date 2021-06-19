@@ -1,6 +1,4 @@
 const express = require("express");
-let fs;
-fs = require("fs");
 const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -29,8 +27,6 @@ sequelize.sync({force:false}).then(()=>{
     console.log(reason)
 });
 
-let data = fs.readFileSync(`${__dirname}/movies.json`);
-data = JSON.parse(data);
 //let json_data = JSON.stringify(data);
 function resDataParse(resCode,data){
     return {
