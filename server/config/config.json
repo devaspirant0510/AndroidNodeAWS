@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "ubuntu",
+    "password": "lsh#200205",
+    "database": "nodejs_ex",
+    "host": "3.36.106.46",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "lsh#200205",
+    "database": "nodejs_ex",
+    "host": "3.36.106.46",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
