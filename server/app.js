@@ -1,6 +1,4 @@
 const express = require("express");
-let fs;
-fs = require("fs");
 const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -29,9 +27,7 @@ sequelize.sync({force:false}).then(()=>{
     console.log(reason)
 });
 
-let data = fs.readFileSync(`${__dirname}/movies.json`);
-data = JSON.parse(data);
-//let json_data = JSON.stringify(data);
+
 function resDataParse(resCode,data){
     return {
         status:resCode,
@@ -39,19 +35,8 @@ function resDataParse(resCode,data){
     };
 }
 
-function addJsonData(id,title,director,year,synopsis){
-    return {id:id,
-            title:title,
-            director:director,
-
-
-            year:year,
-            synopsis:synopsis};
-}
-
-
 app.get("/",(req, res) => {
-    res.render(path.join(__dirname,"views\\index.html"),{url:"127.0.0.1",port:app.get("port")});
+    res.render(path.join(__dirname,"views/index.html"),{url:"127.0.0.1",port:app.get("port")});
 });
 
 app.get("/movies",async (req, res) => {
@@ -59,8 +44,8 @@ app.get("/movies",async (req, res) => {
         const data = await MovieInfo.findAll({})
         const returnData = resDataParse(res.statusCode,data);
         res.json(returnData);
-
    }catch (err){
+	console.log(err);
 
     }
 });
