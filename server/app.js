@@ -1,83 +1,143 @@
 const express = require("express");
-const fs = require("fs");
-const bodyParser =require("body-parser");
+let fs;
+fs = require("fs");
+const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
+const Sequelize = require("sequelize");
+const nunjucks = require("nunjucks");
+
+const {sequelize,Movie,MovieInfo} = require("./models/");
 
 const app = express();
+
+app.use(express.urlencoded({extended:false}));
+app.use(express.json());
+
+app.set("port",process.env.PORT||3001);
+app.set("view engine","html")
+app.set("views",path.join(__dirname,"views"))
+
+nunjucks.configure({
+    express:app,
+    watch:true
+})
+
+sequelize.sync({force:false}).then(()=>{
+    console.log("연결성공");
+}).catch(reason =>{
+    console.log(reason)
+});
 
 let data = fs.readFileSync(`${__dirname}/movies.json`);
 data = JSON.parse(data);
 //let json_data = JSON.stringify(data);
+function resDataParse(resCode,data){
+    return {
+        status:resCode,
+        data:data
+    };
+}
 
 function addJsonData(id,title,director,year,synopsis){
     return {id:id,
             title:title,
             director:director,
+
+
             year:year,
             synopsis:synopsis};
 }
 
-// app.use("/",express.static("html"));
-app.use("/game",express.static("game"));
-app.use("/a",express.static("views"));
-app.use(bodyParser.urlencoded({extended:true}));
 
 app.get("/",(req, res) => {
-    fs.readFile(__dirname+"\\html\\index.html",(err, data1) => {
-        console.log(data1);
-        res.end(data1);
-    })
-});
-app.get("/mypage",(req,res)=>{
-    //res.writeHead(200,{"Content-Type":"text/html"});
-
-    fs.readFile("./html/index.html",(err, data1) => {
-        res.end(data1);
-    });
+    res.render(path.join(__dirname,"views\\index.html"),{url:"127.0.0.1",port:app.get("port")});
 });
 
-app.get("/game",((req, res) => {
-    console.log(__dirname)
-    fs.readFile("index.game",(err,data)=>{
-        console.log(data);
-        res.end(data);
-    });
-}))
+app.get("/movies",async (req, res) => {
+    try{
+        const data = await MovieInfo.findAll({})
+        const returnData = resDataParse(res.statusCode,data);
+        res.json(returnData);
 
-app.get("/movies/:id",(req, res) => {
+   }catch (err){
+
+    }
+});
+app.post("/movies",async (req, res) => {
+    try{
+        const title = req.body.title;
+        const synopsis = req.body.synopsis;
+        const year = req.body.year;
+        const director = req.body.director;
+
+        const createData = await MovieInfo.create({
+            title:title,
+            director:director,
+            year:year,
+            synopsis:synopsis
+        });
+        const resData = resDataParse(res.statusCode,createData);
+        res.json(resData);
+
+    }catch (err){
+        res.status(200).send("error");
+    }
+})
+app.get("/movies/:id",async (req, res) => {
+    try{
+        const id = req.params.id;
+        const getData = await MovieInfo.findOne({where:{id:id}});
+        if (getData==null){
+            res.status(404).send({status:res.statusCode,"data":"error"});
+        }else{
+            const returnData = resDataParse(res.statusCode,getData);
+            res.json(returnData);
+
+        }
+    }catch (err){
+        res.status(404).send({status:res.statusCode,"data":"error"});
+    }
+
+});
+
+app.delete("/movies/:id",async (req, res) => {
     const id = req.params.id;
-    let index_data = data[id];
-    index_data = JSON.stringify(index_data);
-    res.writeHead(200,{"Content-Type":"application/json;charset=utf-8"});
-    res.end(index_data);
+    const getData = await MovieInfo.destroy({where:{id:id}});
+    if(getData==null){
+        res.status(404).send({status:res.statusCode,"data":"error"});
+    }else{
+        const returnData = resDataParse(res.statusCode,getData);
+        res.json(returnData);
+    }
+})
+
+app.put("/movies/:id",async (req, res) => {
+    try{
+        const id = req.params.id;
+        const title = req.body.title;
+        console.log(title)
+        const synopsis = req.body.synopsis;
+        const year = req.body.year;
+        const director = req.body.director;
+        const getData = await MovieInfo.update({
+            id:id,
+            title:title,
+            director:director,
+            year:year,
+            synopsis:synopsis
+        },{where:{id:id}});
+        console.log(getData);
+        res.json(getData);
+    }catch (err){
+        res.status(404).send("error");
+    }
+
+
 });
 
-app.post("/movies",((req, res,next) => {
-    const id = data.length;
-    const title = req.body.title;
-    const director = req.body.director;
-    const year = req.body.year;
-    const synopsis = req.body.synopsis;
-    const jsonBody = addJsonData(id,title,director,year,synopsis);
-    data.push(jsonBody);
-    console.log(typeof (data));
-    fs.writeFileSync(`${__dirname}/movies.json`,JSON.stringify(data));
-    res.redirect(`/movies`);
 
-}))
-app.get("/movies",(req, res) => {
-    const movie_list = [];
-    res.writeHead(200,{"Content-Type":"application/json;charset=utf-8"});
 
-    data.forEach(value => {
-        movie_list.push({id:value['id'],title:value['title']});
-    });
-
-    const data2obj = {data:movie_list};
-
-    const data2json = JSON.stringify(data2obj);
-    res.end(data2json);
-});
-
-app.listen(3001,()=>{
+app.listen(app.get("port"),()=>{
     console.log("127.0.0.1:3001");
 })
