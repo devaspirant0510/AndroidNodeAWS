@@ -31,7 +31,7 @@ sequelize.sync({force:false}).then(()=>{
 function resDataParse(resCode,data){
     return {
         status:resCode,
-        data:data
+        data:[data]
     };
 }
 
@@ -93,7 +93,7 @@ app.delete("/movies/:id",async (req, res) => {
         res.status(404).send({status:res.statusCode,"data":"error"});
     }else{
         const returnData = resDataParse(res.statusCode,getData);
-        res.json(returnData);
+        res.json([returnData]);
     }
 })
 
@@ -113,7 +113,7 @@ app.put("/movies/:id",async (req, res) => {
             synopsis:synopsis
         },{where:{id:id}});
         console.log(getData);
-        res.json(getData);
+        res.json([getData]);
     }catch (err){
         res.status(404).send("error");
     }
